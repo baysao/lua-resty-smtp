@@ -70,7 +70,7 @@ Installation
 
 or
 
-    luarocks install --local rockspec/resty.smtp-0.0.3-1.rockspec
+    luarocks install resty-smtp
 
 
 
@@ -141,5 +141,3 @@ Known Issues
 * Only work with LuaJIT 2.x now, because the codebase relies on `pcall`
   massively and lua-nginx-module does not work well with standard Lua 5.1 VM
   under this situation. See [Known Issues](http://wiki.nginx.org/HttpLuaModule#Lua_Coroutine_Yielding.2FResuming)
-
-
