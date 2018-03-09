@@ -51,15 +51,20 @@ end
 
 
 function metat.__index:mail(from)
-    self.try(self.tp:command("MAIL", "FROM:" .. from))
 
+   if string.sub(from, 1, 1) ~= "<" then
+      from = "<" .. from .. ">"
+   end
+    self.try(self.tp:command("MAIL", "FROM:" .. from))
     return self.try(self.tp:expect("2.."))
 end
 
 
 function metat.__index:rcpt(to)
-    self.try(self.tp:command("RCPT", "TO:" .. to))
-
+   if string.sub(to, 1, 1) ~= "<" then
+      to = "<" .. to .. ">"
+   end
+    self.try(self.tp:command("RCPT", "TO:" .. to ))
     return self.try(self.tp:expect("2.."))
 end
 
@@ -92,7 +97,6 @@ function metat.__index:login(user, password)
     self.try(self.tp:command(mime.b64(user)))
     self.try(self.tp:expect("3.."))
     self.try(self.tp:command(mime.b64(password)))
-
     return self.try(self.tp:expect("2.."))
 end
 
@@ -122,7 +126,7 @@ end
 -- send message or throw an exception
 function metat.__index:send(mailt)
     self:mail(mailt.from)
-
+    
     if base.type(mailt.rcpt) == "table" then
         for i, v in base.ipairs(mailt.rcpt) do
             self:rcpt(v)
@@ -228,8 +232,7 @@ local function send_source(mesgt)
     -- make sure we have a content-type
     local headers = lower_headers(mesgt.headers or {})
 
-    headers["content-type"] = headers["content-type"] or
-        'text/plain; charset="iso-8859-1"'
+    headers["content-type"] = headers["content-type"] or 'text/html; charset="utf-8"'
 
     send_headers(headers)
 
@@ -248,8 +251,7 @@ local function send_string(mesgt)
     -- make sure we have a content-type
     local headers = lower_headers(mesgt.headers or {})
 
-    headers["content-type"] = headers["content-type"] or
-        'text/plain; charset="iso-8859-1"'
+    headers["content-type"] = headers["content-type"] or 'text/html; charset="utf-8"'
 
     send_headers(headers)
 
